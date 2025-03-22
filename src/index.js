@@ -234,6 +234,30 @@ const tree = (arr, root = null) => {
     else console.log("Value does not exist in the BST");
   };
 
+  const height = (node) => {
+    if (!node) return -1;
+    let leftHeight = height(node.getLeft());
+    let rightHeight = height(node.getRight());
+
+    return Math.max(leftHeight, rightHeight) + 1;
+  };
+
+  const isBalanced = (root) => {
+    if (!root) return true;
+    const leftHeight = height(root.getLeft()) + 1;
+    const rightHeight = height(root.getRight()) + 1;
+    let diff = Math.abs(leftHeight - rightHeight);
+
+    if (diff > 1) return false;
+    return isBalanced(root.getLeft()) && isBalanced(root.getRight());
+  };
+
+  const rebalance = (tree) => {
+    const arr = tree.getSortedArray();
+    tree = buildTree(arr, 0, arr.length - 1);
+    return tree;
+  };
+
   return {
     getSortedArray,
     getRoot,
@@ -245,6 +269,9 @@ const tree = (arr, root = null) => {
     inOrder,
     postOrder,
     depth,
+    height,
+    isBalanced,
+    rebalance,
   };
 };
 
@@ -268,4 +295,7 @@ t1.deleteItem(45);
 console.log(prettyPrint(t1.getRoot()));
 
 console.log(t1.postOrder(t1.getRoot()));
+console.log(t1.height(t1.getRoot().getLeft()));
+console.log(t1.isBalanced(t1.getRoot()));
+console.log(prettyPrint(t1.rebalance(t1)));
 // console.log(t1.depth(20)); //testing depth
